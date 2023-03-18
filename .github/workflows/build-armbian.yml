@@ -12,7 +12,7 @@ on:
       set_release:
         description: "Select OS Release."
         required: false
-        default: "jammy"
+        default: "bullseye"
         type: choice
         options:
           - jammy
@@ -63,6 +63,7 @@ on:
           - vplus
           - tqc-a01
           - tanix-tx6
+          - lx-r3s
       armbian_kernel:
         description: "Select kernel version."
         required: false
@@ -139,7 +140,7 @@ jobs:
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
           df -hT ${PWD}
-          git clone -q --single-branch --depth 1 -b master https://github.com/armbian/build.git build
+          git clone -q --single-branch --depth 1 -b master https://github.com/TKaxv-7S/armbian-build.git build
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Compile Armbian [ ${{ env.ARMBIAN_RELEASE }} ]
@@ -177,7 +178,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Rebuild Armbian
-        uses: ophub/amlogic-s9xxx-armbian@main
+        uses: TKaxv-7S/tk-armbian@main
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: armbian

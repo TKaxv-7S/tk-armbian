@@ -57,6 +57,7 @@ on:
           - vplus
           - tqc-a01
           - tanix-tx6
+          - lx-r3s
       armbian_kernel:
         description: "Select kernel version."
         required: false
@@ -156,7 +157,7 @@ jobs:
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Rebuild Armbian
-        uses: ophub/amlogic-s9xxx-armbian@main
+        uses: TKaxv-7S/tk-armbian@main
         if: ${{ env.ARMBIAN_URL }} != '' && !cancelled()
         with:
           build_target: armbian
