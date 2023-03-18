@@ -178,7 +178,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Rebuild Armbian
-        uses: TKaxv-7S/tk-armbian@main
+        uses: TKaxv-7S/tk-armbian@main_tk
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: armbian

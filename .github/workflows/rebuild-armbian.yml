@@ -157,7 +157,7 @@ jobs:
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Rebuild Armbian
-        uses: TKaxv-7S/tk-armbian@main
+        uses: TKaxv-7S/tk-armbian@main_tk
         if: ${{ env.ARMBIAN_URL }} != '' && !cancelled()
         with:
           build_target: armbian
