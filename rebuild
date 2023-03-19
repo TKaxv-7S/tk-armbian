@@ -572,10 +572,6 @@ copy_files() {
     process_msg " (3/7) Copy the Armbian files."
     cd ${current_path}
 
-    # Create a dual-partition general directory
-    tag_bootfs="${tmp_build}/bootfs"
-    tag_rootfs="${tmp_build}/rootfs"
-    mkdir -p ${tag_bootfs} ${tag_rootfs}
 
     # Mount bootfs
     if [[ "${bootfs_type}" == "fat32" ]]; then
@@ -623,6 +619,11 @@ copy_files() {
 replace_kernel() {
     process_msg " (4/7) Replace kernel files."
     cd ${current_path}
+
+    # Create a dual-partition general directory
+    tag_bootfs="${tmp_build}/bootfs"
+    tag_rootfs="${tmp_build}/rootfs"
+    mkdir -p ${tag_bootfs} ${tag_rootfs}
 
     # Determine custom kernel filename
     kernel_boot="$(ls ${kernel_path}/${kd}/${kernel}/boot-${kernel}*.tar.gz 2>/dev/null | head -n 1)"
