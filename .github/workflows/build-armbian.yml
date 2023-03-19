@@ -20,7 +20,7 @@ on:
       armbian_board:
         description: "Select device board."
         required: false
-        default: "all"
+        default: "lx-r3s"
         type: choice
         options:
           - all
@@ -67,7 +67,7 @@ on:
       armbian_kernel:
         description: "Select kernel version."
         required: false
-        default: "5.15.85_6.1.1"
+        default: "5.15.98"
         type: string
 #        type: choice
 #        options:
@@ -87,7 +87,7 @@ on:
       kernel_repo:
         description: "Set the kernel repository."
         required: false
-        default: "https://github.com/ophub/kernel/tree/main/pub"
+        default: "https://github.com/TKaxv-7S/tk-armbian-kernel/tree/main/pub"
       armbian_size:
         description: "Set armbian rootfs size(Unit: MiB)."
         required: false
