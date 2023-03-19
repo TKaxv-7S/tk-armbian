@@ -634,6 +634,7 @@ replace_kernel() {
     [[ -s "${kernel_boot}" && -s "${kernel_dtb}" && -s "${kernel_modules}" && -s "${kernel_header}" ]] || error_msg "The 4 kernel missing."
 
     # 01. For /boot five files
+    echo "tar -xzf ${kernel_boot} -C ${tag_bootfs}"
     tar -xzf ${kernel_boot} -C ${tag_bootfs}
     [[ "${PLATFORM}" == "amlogic" ]] && (cd ${tag_bootfs} && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage)
     [[ "${PLATFORM}" == "rockchip" ]] && (cd ${tag_bootfs} && ln -sf uInitrd-${kernel_name} uInitrd && ln -sf vmlinuz-${kernel_name} Image)
