@@ -94,24 +94,10 @@ runs:
             echo -e "Get armbian file input parameters: [ ${armbian_file} ]"
             [[ -z "${armbian_file}" ]] && echo -e "The [ armbian_path ] variable must be specified." && exit 1
             [[ -d "${armbian_filepath}" ]] || mkdir -p ${armbian_filepath}
-            if [[ "${armbian_file}" == http* ]]; then
-                echo -e "Use wget to download file: [ ${armbian_file} ]"
-                wget ${armbian_file} -q -P ${armbian_filepath} 2>/dev/null
-            else
-                echo -e "Copy files: [ ${armbian_file} ]"
-                cp -vf ${GITHUB_WORKSPACE}/${armbian_file} ${armbian_filepath} 2>/dev/null
-            fi
             sync
             echo -e "About the ${armbian_filepath} directory: \n$(ls -l ${armbian_filepath} 2>/dev/null)"
 
             cd ${GITHUB_ACTION_PATH}/${armbian_filepath}
-            echo -e "Check the armbian file format..."
-            down_file="$(ls -l . 2>/dev/null | grep "^-" | awk '{print $9}' | head -n 1)"
-            [[ -z "${down_file}" ]] && echo -e "The [ ${armbian_file} ] is invalid." && exit 1
-            [[ "${down_file:0-7}" == ".img.gz" ]] && gzip -df ${down_file} 2>/dev/null && sync
-            [[ "${down_file:0-7}" == ".img.xz" ]] && xz -d ${down_file} 2>/dev/null && sync
-            [[ "${down_file:0-4}" == ".zip" ]] && unzip -o ${down_file} 2>/dev/null && sync
-            echo -e "Armbian file: \n$(ls -l *.img 2>/dev/null)"
 
             cd ${GITHUB_ACTION_PATH}
             echo -e "Start to rebuild armbian..."
