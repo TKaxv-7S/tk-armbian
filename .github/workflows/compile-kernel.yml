@@ -17,6 +17,7 @@ on:
         type: choice
         options:
           - unifreq
+          - TKaxv-7S/linux-5.15.y@5.15.98
       kernel_version:
         description: "Select kernel version"
         required: false
