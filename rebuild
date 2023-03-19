@@ -659,6 +659,7 @@ replace_kernel() {
     echo "tar -xzf ${kernel_modules} -C ${tag_rootfs}/usr/lib/modules"
     mkdir -p ${tag_rootfs}/usr/lib/modules
     tar -xzf ${kernel_modules} -C ${tag_rootfs}/usr/lib/modules
+    ls -al ${tag_rootfs}/usr/lib/modules
     (cd ${tag_rootfs}/usr/lib/modules/${kernel_name}/ && rm -f build source 2>/dev/null && ln -sf /usr/src/${header_path} build)
     [[ "$(ls ${tag_rootfs}/usr/lib/modules/${kernel_name} -l 2>/dev/null | grep "^d" | wc -l)" -eq "1" ]] || error_msg "/usr/lib/modules kernel folder is missing."
 }
