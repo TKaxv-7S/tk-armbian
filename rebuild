@@ -442,12 +442,6 @@ extract_armbian() {
     rm -f ${armbian_image_file}
     cp -f "${armbian_outputpath}/${armbian_rebuild_name}" "${armbian_image_file}"
 
-    loop_old="$(losetup -P -f --show "${armbian_image_file}")"
-    [[ -n "${loop_old}" ]] || error_msg "losetup ${armbian_image_file} failed."
-
-    mount -o discard ${loop_old}p1 ${tmp_armbian}
-    [[ "${?}" -eq "0" ]] || error_msg "mount ${loop_old}p1 failed!"
-
     cd ${tmp_armbian}
 
     # Find ID in ${os_release_file}: such as [ubuntu/debian]
@@ -995,9 +989,9 @@ loop_rebuild() {
                     fi
 
                     # Execute the following functions in sequence
-                    extract_armbian
-                    make_image
-                    copy_files
+#                    extract_armbian
+#                    make_image
+#                    copy_files
                     replace_kernel
                     refactor_bootfs
                     refactor_rootfs
