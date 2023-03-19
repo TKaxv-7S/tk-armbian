@@ -1027,7 +1027,7 @@ echo -e "${INFO} Server running on Ubuntu: [ Release: ${host_release} / Host: ${
 # Initialize variables
 init_var "${@}"
 # Find rebuild files
-find_armbian
+#find_armbian
 # Download the dependency files
 download_depends
 # Query the latest kernel version
