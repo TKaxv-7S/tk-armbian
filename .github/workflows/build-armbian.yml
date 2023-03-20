@@ -64,21 +64,25 @@ on:
           - tqc-a01
           - tanix-tx6
           - lx-r3s
+      minimal_image:
+        description: "Build a minimal image."
+        required: false
+        default: false
+        type: boolean
       armbian_kernel:
         description: "Select kernel version."
         required: false
-        default: "5.15.85_6.1.1"
-        type: string
-#        type: choice
-#        options:
-#          - 5.4.225_5.10.160_5.15.85
-#          - 5.4.225_5.10.160
-#          - 5.10.160_5.15.85
-#          - 5.15.85_6.1.1
-#          - 5.4.225
-#          - 5.10.160
-#          - 5.15.85
-#          - 6.1.1
+        default: "5.15.1_6.1.1"
+        type: choice
+        options:
+          - 5.4.1_5.10.1_5.15.1
+          - 5.4.1_5.10.1
+          - 5.10.1_5.15.1
+          - 5.15.1_6.1.1
+          - 5.4.1
+          - 5.10.1
+          - 5.15.1
+          - 6.1.1
       auto_kernel:
         description: "Auto use the latest kernel."
         required: false
@@ -133,6 +137,19 @@ jobs:
           sudo -E apt-get -y autoremove --purge
           sudo -E apt-get clean
           sudo timedatectl set-timezone "${TZ}"
+
+          # Add BUILD_MINIMAL settings: build bare CLI image suitable for application deployment.
+          minimal_image="${{ inputs.minimal_image }}"
+          if [[ "${minimal_image}" == "true" ]]; then
+              minimal_option="yes"
+              minimal_tag="_minimal"
+          else
+              minimal_option="no"
+              minimal_tag=""
+          fi
+          echo "ARMBIAN_MINIMAL_TAG=${minimal_tag}" >> ${GITHUB_ENV}
+          echo "ARMBIAN_MINIMAL_OPTION=${minimal_option}" >> ${GITHUB_ENV}
+
           echo "ARMBIAN_RELEASE=${{ inputs.set_release }}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
@@ -141,18 +158,19 @@ jobs:
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
           df -hT ${PWD}
-          git clone -q --single-branch --depth 1 -b master https://github.com/TKaxv-7S/armbian-build.git build
+          git clone -q --single-branch --depth=1 --branch=main https://github.com/armbian/build.git build
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Compile Armbian [ ${{ env.ARMBIAN_RELEASE }} ]
+      - name: Compile Armbian [ ${{ env.ARMBIAN_RELEASE }}${{ env.ARMBIAN_MINIMAL_TAG }} ]
         id: compile
         if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
         run: |
           # Compile method and parameter description: https://docs.armbian.com/Developer-Guide_Build-Options
           cd build/
-          sudo ./compile.sh RELEASE=${{ env.ARMBIAN_RELEASE }} BOARD=odroidn2 BRANCH=current BUILD_ONLY=default HOST=armbian EXPERT=yes \
-                            BUILD_DESKTOP=no BUILD_MINIMAL=no KERNEL_CONFIGURE=no CLEAN_LEVEL="make,debs" COMPRESS_OUTPUTIMAGE="sha"
-          echo "build_tag=Armbian_${{ env.ARMBIAN_RELEASE }}_$(date +"%m.%d.%H%M")" >> ${GITHUB_OUTPUT}
+              ./compile.sh RELEASE=${{ env.ARMBIAN_RELEASE }} BUILD_MINIMAL=${{ env.ARMBIAN_MINIMAL_OPTION }} \
+                  BOARD=odroidn2 BRANCH=current BUILD_ONLY=default HOST=armbian BUILD_DESKTOP=no EXPERT=yes \
+                  KERNEL_CONFIGURE=no CLEAN_LEVEL="make,cache,alldebs,sources" COMPRESS_OUTPUTIMAGE="sha"
+          echo "build_tag=Armbian_${{ env.ARMBIAN_RELEASE }}${{ env.ARMBIAN_MINIMAL_TAG }}_$(date +"%m.%d.%H%M")" >> ${GITHUB_OUTPUT}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Clean up server space
