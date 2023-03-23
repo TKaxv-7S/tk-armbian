@@ -256,7 +256,7 @@ find_armbian() {
     [[ -n "${armbian_rebuild_name}" ]] || error_msg "The armbian original file does not exist: [ ${armbian_rebuild_file} ]"
 
     # Find armbian version info: such as [ 22.02.0 ]
-    armbian_rebuild_version="$(echo ${armbian_rebuild_name} | grep -oE '[2-9][2-9]\.[0-9]{1,2}\.[0-9]{1,2}' | head -n 1)"
+    armbian_rebuild_version="$(echo ${armbian_rebuild_name} | grep -oE '[2-9][0-9]\.[0-9]{1,2}\.[0-9]{1,2}' | head -n 1)"
     [[ -n "${armbian_rebuild_version}" ]] || {
         armbian_rebuild_version="22.02.02"
         echo -e "${WARNING} Missing armbian version info!"
@@ -890,10 +890,6 @@ refactor_rootfs() {
     mac_hexchars="0123456789ABCDEF"
     mac_end="$(for i in {1..6}; do echo -n ${mac_hexchars:$((${RANDOM} % 16)):1}; done | sed -e 's/\(..\)/:\1/g')"
     random_macaddr="9E:61${mac_end}"
-
-    # Set interfaces macaddr
-    interfaces_file="etc/network/interfaces"
-    [[ -f "${interfaces_file}" ]] && sed -i "s|hwaddress ether.*|hwaddress ether ${random_macaddr}:AA|g" ${interfaces_file}
 
     # Optimize wifi/bluetooth module
     [[ -d "usr/lib/firmware/brcm" ]] && (
