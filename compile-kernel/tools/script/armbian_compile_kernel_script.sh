@@ -67,7 +67,7 @@ gun_file="arm-gnu-toolchain-12.2.rel1-aarch64-aarch64-none-elf.tar.xz"
 # Set the toolchain path
 toolchain_path="/usr/local/toolchain"
 # Set the default cross-compilation toolchain: [ gcc / clang ]
-toolchain_name="clang"
+toolchain_name="gcc"
 
 # Set font color
 STEPS="[\033[95m STEPS \033[0m]"
@@ -484,22 +484,31 @@ packit_dtbs() {
     echo -e "${STEPS} Packing the [ ${kernel_outname} ] dtbs packages..."
 
     cd ${out_kernel}/dtb/allwinner
-    cp -f ${kernel_path}/${local_kernel_path}/arch/arm64/boot/dts/allwinner/*.dtb . && chmod +x *
-    tar -czf dtb-allwinner-${kernel_outname}.tar.gz *
-    mv -f *.tar.gz ${out_kernel}/${kernel_version}
-    echo -e "${SUCCESS} The [ dtb-allwinner-${kernel_outname}.tar.gz ] file is packaged."
+    cp -f ${kernel_path}/${local_kernel_path}/arch/arm64/boot/dts/allwinner/*.dtb . 2>/dev/null
+    [[ "${?}" -eq "0" ]] && {
+        chmod +x *
+        tar -czf dtb-allwinner-${kernel_outname}.tar.gz *
+        mv -f *.tar.gz ${out_kernel}/${kernel_version}
+        echo -e "${SUCCESS} The [ dtb-allwinner-${kernel_outname}.tar.gz ] file is packaged."
+    }
 
     cd ${out_kernel}/dtb/amlogic
-    cp -f ${kernel_path}/${local_kernel_path}/arch/arm64/boot/dts/amlogic/*.dtb . && chmod +x *
-    tar -czf dtb-amlogic-${kernel_outname}.tar.gz *
-    mv -f *.tar.gz ${out_kernel}/${kernel_version}
-    echo -e "${SUCCESS} The [ dtb-amlogic-${kernel_outname}.tar.gz ] file is packaged."
+    cp -f ${kernel_path}/${local_kernel_path}/arch/arm64/boot/dts/amlogic/*.dtb . 2>/dev/null
+    [[ "${?}" -eq "0" ]] && {
+        chmod +x *
+        tar -czf dtb-amlogic-${kernel_outname}.tar.gz *
+        mv -f *.tar.gz ${out_kernel}/${kernel_version}
+        echo -e "${SUCCESS} The [ dtb-amlogic-${kernel_outname}.tar.gz ] file is packaged."
+    }
 
     cd ${out_kernel}/dtb/rockchip
-    cp -f ${kernel_path}/${local_kernel_path}/arch/arm64/boot/dts/rockchip/*.dtb . && chmod +x *
-    tar -czf dtb-rockchip-${kernel_outname}.tar.gz *
-    mv -f *.tar.gz ${out_kernel}/${kernel_version}
-    echo -e "${SUCCESS} The [ dtb-rockchip-${kernel_outname}.tar.gz ] file is packaged."
+    cp -f ${kernel_path}/${local_kernel_path}/arch/arm64/boot/dts/rockchip/*.dtb . 2>/dev/null
+    [[ "${?}" -eq "0" ]] && {
+        chmod +x *
+        tar -czf dtb-rockchip-${kernel_outname}.tar.gz *
+        mv -f *.tar.gz ${out_kernel}/${kernel_version}
+        echo -e "${SUCCESS} The [ dtb-rockchip-${kernel_outname}.tar.gz ] file is packaged."
+    }
 }
 
 packit_kernel() {

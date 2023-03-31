@@ -27,12 +27,12 @@ The latest version of the Armbian system can be downloaded in [Releases](https:/
 | s905lb | [Q96-mini](https://github.com/ophub/amlogic-s9xxx-armbian/issues/734), [BesTV-R3300L](https://github.com/ophub/amlogic-s9xxx-armbian/pull/993), [SumaVision-Q7](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1190) | All | amlogic_s905lb.img |
 | s905 | [Beelink-Mini-MX-2G](https://github.com/ophub/amlogic-s9xxx-armbian/issues/127), [Sunvell-T95M](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/337), [MXQ-Pro+4K](https://github.com/ophub/amlogic-s9xxx-armbian/issues/715), [SumaVision-Q5](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1175) | All | amlogic_s905.img |
 | rk3588 | [Radxa-Rock5B](https://wiki.radxa.com/Rock5/5b), [HinLink-H88K](http://www.hinlink.com/index.php?id=138) | [rk3588](https://github.com/ophub/kernel/releases/tag/kernel_rk3588) | rockchip_boxname.img |
-| rk3568 | [FastRhino-R66S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1061), [FastRhino-R68S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/774), [HinLink-H66K](http://www.hinlink.com/index.php?id=137), [HinLink-H68K](http://www.hinlink.com/index.php?id=119), [Radxa-E25](https://wiki.radxa.com/Rock3/CM/CM3I/E25) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
-| rk3399 | [EAIDK-610](https://github.com/ophub/amlogic-s9xxx-armbian/pull/991), [KING3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1080), [TN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1094), [KYLIN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1132) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
+| rk3568 | [FastRhino-R66S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1061), [FastRhino-R68S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/774), [HinLink-H66K](http://www.hinlink.com/index.php?id=137), [HinLink-H68K](http://www.hinlink.com/index.php?id=119), [Radxa-E25](https://wiki.radxa.com/Rock3/CM/CM3I/E25), [NanoPi-R5S](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1217) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
+| rk3399 | [EAIDK-610](https://github.com/ophub/amlogic-s9xxx-armbian/pull/991), [King3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1080), [TN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1094), [Kylin3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1132) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
 | rk3328 | [BeikeYun](https://github.com/ophub/amlogic-s9xxx-armbian/issues/852), [L1-Pro](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1007) | All | rockchip_boxname.img |
 | h6 | [Vplus](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1100), [TQC-A01](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1111), [Tanix-TX6](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1120) | All | allwinner_boxname.img |
 
-💡Tip: Currently [s905 Boxes](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173) can only be used in `TF/SD/USB`, Other models of boxes support writing to `eMMC` for use. For more information, please refer to [Description of Supported Device List](build-armbian/documents/amlogic_model_database.md).
+💡Tip: Currently [s905 Boxes](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173) can only be used in `TF/SD/USB`, Other models of boxes support writing to `eMMC` for use. For more information, please refer to [Description of Supported Device List](build-armbian/armbian-files/common-files/etc/model_database.conf). You can refer to the method in Section 12.15 of the documentation to [add new support devices](build-armbian/documents/README.md#1215-how-to-add-new-supported-devices).
 
 ## Install to EMMC and update instructions
 
@@ -117,57 +117,6 @@ armbian-openvfd
 ```
 
 Debug according to [LED screen display control instructions](build-armbian/documents/led_screen_display_control.md).
-
-- ### Use Armbian in TF/SD/USB
-
-`Amlogic` box needs to manually activate the remaining space of TF/SD/USB (Rockchip and Allwinner have been activated automatically), Login in to armbian → input command:
-
-```yaml
-armbian-tf
-```
-
-According to the prompt, enter `e` to expand the remaining space to the current system partition and file system, and enter `c` to create a new third partition.
-
-<details>
-  <summary>Or manually allocate the remaining space</summary>
-
-#### View [Operation screenshot](https://user-images.githubusercontent.com/68696949/137860992-fbd4e2fa-e90c-4bbb-8985-7f5db9f49927.jpg)
-
-```yaml
-# 1. Confirm the name of the TF/SD/USB according to the size of the space. The TF/SD is [ `mmcblk` ], USB is [ `sd` ]
-Command: Enter [ fdisk -l | grep "sd" ]
-
-# 2. Get the starting value of the remaining space, Copy and save, used below  (E.g: 5382144)
-Command: Enter [ fdisk -l | grep "sd" | sed -n '$p' | awk '{print $3}' | xargs -i expr {} + 1 ]
-
-# 3. Start allocating unused space (E.g: sda, mmcblk0 or mmcblk1)
-Command: Enter [ fdisk /dev/sda ] Start allocating the remaining space
-Command: Select [ n ] to create a partition
-Command: Select [ p ] to specify the partition type as primary partition
-Command: Set the partition number to [ 3 ]
-Command: The start value of the partition, enter the value obtained in the second step, E.g: [ 5382144 ]
-Command: End value, press [ Enter ] to use the default value
-Command: If there is a hint: Do you want to remove the signature? [Y]es/[N]o: Enter [ Y ]
-Command: Enter [ t ] to specify the partition type
-Command: Enter Partition number [ 3 ]
-Command: Enter Hex code (type L to list all codes): [ 83 ]
-Command: Enter [ w ] to save
-Command: Enter [ reboot ] to restart
-
-# 4. After restarting, format the new partition
-Command: Enter [ mkfs.ext4 -F -L SHARED /dev/sda3 ] to format the new partition
-
-# 5. Set the mount directory for the new partition
-Command: Enter [ mkdir -p /mnt/share ] to Create mount directory
-Command: Enter [ mount -t ext4 /dev/sda3 /mnt/share ] to Mount the newly created partition to the directory
-
-# 6. Add automatic mount at boot
-Command: Enter [ vi /etc/fstab ]
-# Press [ i ] to enter the input mode, copy the following values to the end of the file
-/dev/sda3 /mnt/share ext4 defaults 0 0
-# Press [ esc ] to exit, Input [ :wq! ] and [ Enter ] to Save, Finish.
-```
-</details>
 
 - ### Backup/restore the original EMMC system
 

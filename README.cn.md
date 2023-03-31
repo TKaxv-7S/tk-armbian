@@ -27,12 +27,12 @@
 | s905lb | [Q96-mini](https://github.com/ophub/amlogic-s9xxx-armbian/issues/734), [BesTV-R3300L](https://github.com/ophub/amlogic-s9xxx-armbian/pull/993), [SumaVision-Q7](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1190) | 全部 | amlogic_s905lb.img |
 | s905 | [Beelink-Mini-MX-2G](https://github.com/ophub/amlogic-s9xxx-armbian/issues/127), [Sunvell-T95M](https://github.com/ophub/amlogic-s9xxx-openwrt/issues/337), [MXQ-Pro+4K](https://github.com/ophub/amlogic-s9xxx-armbian/issues/715), [SumaVision-Q5](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1175) | 全部 | amlogic_s905.img |
 | rk3588 | [Radxa-Rock5B](https://wiki.radxa.com/Rock5/5b), [HinLink-H88K](http://www.hinlink.com/index.php?id=138) | [rk3588](https://github.com/ophub/kernel/releases/tag/kernel_rk3588) | rockchip_boxname.img |
-| rk3568 | [FastRhino-R66S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1061), [FastRhino-R68S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/774), [HinLink-H66K](http://www.hinlink.com/index.php?id=137), [HinLink-H68K](http://www.hinlink.com/index.php?id=119), [Radxa-E25](https://wiki.radxa.com/Rock3/CM/CM3I/E25) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
-| rk3399 | [EAIDK-610](https://github.com/ophub/amlogic-s9xxx-armbian/pull/991), [KING3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1080), [TN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1094), [KYLIN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1132) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
+| rk3568 | [FastRhino-R66S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1061), [FastRhino-R68S](https://github.com/ophub/amlogic-s9xxx-armbian/issues/774), [HinLink-H66K](http://www.hinlink.com/index.php?id=137), [HinLink-H68K](http://www.hinlink.com/index.php?id=119), [Radxa-E25](https://wiki.radxa.com/Rock3/CM/CM3I/E25), [NanoPi-R5S](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1217) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
+| rk3399 | [EAIDK-610](https://github.com/ophub/amlogic-s9xxx-armbian/pull/991), [King3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1080), [TN3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1094), [Kylin3399](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1132) | [6.x.y](https://github.com/ophub/kernel/releases/tag/kernel_stable) | rockchip_boxname.img |
 | rk3328 | [BeikeYun](https://github.com/ophub/amlogic-s9xxx-armbian/issues/852), [L1-Pro](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1007) | 全部 | rockchip_boxname.img |
 | h6 | [Vplus](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1100), [TQC-A01](https://github.com/ophub/amlogic-s9xxx-armbian/pull/1111), [Tanix-TX6](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1120) | 全部 | allwinner_boxname.img |
 
-💡提示：目前 [s905 的盒子](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173)只能在 `TF/SD/USB` 中使用，其他型号的盒子支持写入 `EMMC` 中使用。更多信息请查阅[支持的设备列表说明](build-armbian/documents/amlogic_model_database.md)。
+💡提示：目前 [s905 的盒子](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1173)只能在 `TF/SD/USB` 中使用，其他型号的盒子支持写入 `EMMC` 中使用。更多信息请查阅[支持的设备列表说明](build-armbian/armbian-files/common-files/etc/model_database.conf)。可以参考说明文档中 12.15 章节的方法[添加新的支持设备](build-armbian/documents/README.cn.md#1215-如何添加新的支持设备)。
 
 ## 安装及升级 Armbian 的相关说明
 
@@ -117,57 +117,6 @@ armbian-openvfd
 ```
 
 根据 [LED 屏显示控制说明](build-armbian/documents/led_screen_display_control.md) 进行调试。
-
-- ### 在 TF/SD/USB 中使用 Armbian
-
-`Amlogic` 盒子需要手动激活 TF/SD/USB 的剩余空间（Rockchip 和 Allwinner 已自动激活），登录 Armbian 系统 → 输入命令：
-
-```yaml
-armbian-tf
-```
-
-根据提示输入 `e` 将剩余空间扩容至当前系统分区和文件系统，输入 `c` 将创建新的第 3 分区。
-
-<details>
-  <summary>或者手动分配剩余空间 </summary>
-
-#### 查看 [操作截图](https://user-images.githubusercontent.com/68696949/137860992-fbd4e2fa-e90c-4bbb-8985-7f5db9f49927.jpg)
-
-```yaml
-# 1. 根据空间大小确认 TF/SD/USB 的名称，TF/SD 为 [ mmcblk ]，USB 为[ sd ]
-在命令行中: 输入 [ fdisk -l | grep "sd" ] 查看卡的名称
-
-# 2. 获取剩余空间的起始值，复制并保存，下面使用（例如：5382144）
-在命令行中: 输入 [ fdisk -l | grep "sd" | sed -n '$p' | awk '{print $3}' | xargs -i expr {} + 1 ] 得到剩余空间起始值
-
-# 3. 开始分配未使用的空间（例如：sda、mmcblk0 或 mmcblk1）
-在命令行中: 输入 [ fdisk /dev/sda ] 开始分配剩余空间
-在命令行中: 输入 [ n ] 创建新分区
-在命令行中: 输入 [ p ] 指定分区类型为主分区
-在命令行中: 将分区号设置为 [ 3 ]
-在命令行中: 分区的起始值，输入第二步得到的值 [ 5382144 ]
-在命令行中: 分区的结束值，按 [ 回车 ] 使用默认值
-在命令行中: 如果提示是否删除签名？[Y]es/[N]o: 输入 [ Y ]
-在命令行中: 输入 [ t ] 指定分区类型
-在命令行中: 输入分区编号 [ 3 ]
-在命令行中: 指定分区类型为 Linux，输入代码 [ 83 ]
-在命令行中: 输入 [ w ] 保存结果
-在命令行中: 输入 [ reboot ] 重启
-
-# 4. 重新启动后，格式化新分区
-在命令行中: 输入 [ mkfs.ext4 -F -L SHARED /dev/sda3 ] 格式新分区
-
-# 5. 为新分区设置挂载目录
-在命令行中: 输入 [ mkdir -p /mnt/share ] 创建新分区的挂载目录
-在命令行中: 输入 [ mount -t ext4 /dev/sda3 /mnt/share ] 进行挂载
-
-# 6. 添加开机自动挂载
-在命令行中: [ vi /etc/fstab ]
-# 按 [ i ] 进入编译模式，将下面的代码复制，黏贴到文件的末尾处
-/dev/sda3 /mnt/share ext4 defaults 0 0
-# 按 [ esc ] 键退出，输入 [ :wq! ] 后按 [ 回车 ] 保存退出，结束设置。
-```
-</details>
 
 - ### 备份/还原 EMMC 原系统
 

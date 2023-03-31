@@ -362,7 +362,11 @@ In the use of Armbian, some common problems that may be encountered are summariz
 
 ### 12.1 dtb and u-boot correspondence table for each box
 
-Please refer to [Description](amlogic_model_database.md)
+The list of supported TV boxes is located in the configuration file of the `Armbian` system is [/etc/model_database.conf](../armbian-files/common-files/etc/model_database.conf).
+
+Where the value of `BUILD` is `yes`, it is the system of some boxes packed by default, and these boxes can be used directly. The default value is `no`, and these unpacked boxes need to download the same `FAMILY` packaged system (it is recommended to download the `5.15/5.4` kernel system). After writing to `USB`, you can open the `boot partition on USB` on the computer, modify the `dtb name of FDT` in the `/boot/uEnv.txt` file, and other boxes in the adaptation list.
+
+For users who perform custom compilation in the `fork` source code repository, if their device is not in the default packaging list, they can modify `no` in `BUILD` to `yes`, and set `a unique value` for `BOARD` to directly package their own device. The `unique value` added to `BOARD` can be used independently when packaging system, for example, `./rebuild -b s905x3` will generate the Armbian system corresponding to `s905x3` configuration, You need to add `BOARD` to [armbian_board](../../.github/workflows/build-armbian.yml#L20) option in the workflow control file when compiling separately in `github Actions`. When building all, `BUILD` is `yes`, all will be packaged.
 
 ### 12.2 LED screen display control instructions
 
@@ -797,5 +801,22 @@ In addition to solving problems through the system software layer, you can also 
 
 ### 12.17 How to fix the Bullseye version with no sound
 
+Error log information for sound issues:
+
+```shell
+Mar 29 15:47:18 armbian-ct2000 kernel:  fe.dai-link-0: ASoC: dpcm_fe_dai_prepare() failed (-22)
+Mar 29 15:47:18 armbian-ct2000 kernel:  fe.dai-link-0: ASoC: no backend DAIs enabled for fe.dai-link-0
+```
+
 Please refer to the method in [Bullseye NO Sound](https://github.com/ophub/amlogic-s9xxx-armbian/issues/1000) to set.
+
+```shell
+wget https://github.com/ophub/kernel/releases/download/tools/bullseye_g12_sound-khadas-utils-4-2-any.tar.gz
+tar -xzf bullseye_g12_sound-khadas-utils-4-2-any.tar.gz -C /
+
+systemctl enable sound.service
+systemctl restart sound.service
+```
+
+Restart the Armbian test. If the sound still does not work, it may be because your box uses the old conf corresponding sound output route, you need to comment out the new configuration corresponding to `L137-L142` in /usr/bin/g12_sound.sh (mainly for G12B is used, that is, S922X, the old G12A/S905X2 before, and SM1/S905X3 based on G12A are mostly not used), and then cancel the comment of the old configuration corresponding to `L130-L134`.
 
